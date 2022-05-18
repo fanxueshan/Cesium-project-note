@@ -58,3 +58,7 @@ Cesium.when.all([promise...], function (layers) {})
 layer.visible=false // 隐藏图层
 viewer.scene.layers.remove(图层名称) // 删除图层
 ```
+7. WGS84坐标位置转换为屏幕坐标
+```
+const point = Cesium.SceneTransforms.wgs84ToWindowCoordinates(viewer.scene,position);
+```
