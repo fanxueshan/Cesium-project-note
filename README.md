@@ -45,3 +45,4 @@ scene.skyBox = new Cesium.SkyBox({
    let directionalLight_h1 = new Cesium.DirectionalLight(position1, options1);
    scene.addLightSource(directionalLight_v);
    scene.addLightSource(directionalLight_h1);
+```
