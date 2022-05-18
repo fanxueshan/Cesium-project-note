@@ -8,6 +8,7 @@
  viewer.imageryLayers.addImageryProvider(new Cesium.SingleTileImageryProvider({
         url: './assets/image/world-bg.jpg'
  }));
+```
 3. 添加天空盒子
 ```
 scene.skyBox = new Cesium.SkyBox({
@@ -26,6 +27,7 @@ scene.skyBox = new Cesium.SkyBox({
             './assets/image/Down.jpg',
         },
 })
+```
 4. 添加光源
 ```
    let point = { x: 6377163, y: -420, z: -344 }
