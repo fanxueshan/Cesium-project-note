@@ -46,3 +46,15 @@ scene.skyBox = new Cesium.SkyBox({
    scene.addLightSource(directionalLight_v);
    scene.addLightSource(directionalLight_h1);
 ```
+5. 打开场景服务下所有图层。
+```
+const promise = scene.open(场景地址); // 返回promise异步加载对象。
+promise.then(function(layers){});
+// 如果有多个则可以时用all的方法。
+Cesium.when.all([promise...], function (layers) {})
+```
+6. 图层的显示、隐藏和删除
+```
+layer.visible=false // 隐藏图层
+viewer.scene.layers.remove(图层名称) // 删除图层
+```
