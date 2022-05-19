@@ -62,3 +62,40 @@ viewer.scene.layers.remove(图层名称) // 删除图层
 ```
 const point = Cesium.SceneTransforms.wgs84ToWindowCoordinates(viewer.scene,position);
 ```
+8. 种树
+```
+var s3mInstanceColc = new Cesium.S3MInstanceCollection(scene._context);
+scene.primitives.add(s3mInstanceColc);
+// 需要种树的坐标点
+var defaultUrl = './models/springTree.s3m'; // 树的三维模型数据
+const points = [
+    { x: 0, y: 0, z: 6378137 }, // 北极
+    { x: 0, y: 0, z: -6378137 }, // 南极
+    { x: 0, y: 6378137, z: 0 }, // 亚洲下方
+    { x: 0, y: -6378137, z: 0 }, // 北美下方
+    { x: 6378137, y: 0, z: 0 }, // 非洲右侧 赤道和本初子午线的交点
+    { x: -6378137, y: 0, z: 0 }, // 太平洋 180度经线，又称为对向子午线,东经180°/西经180°
+]
+points.forEach(v => {
+    s3mInstanceColc.add(defaultUrl, {
+        position: v, // 世界位置
+        hpr: new Cesium.HeadingPitchRoll(0, 0, 0), // 旋转
+        scale: new Cesium.Cartesian3(150000, 150000, 150000), // xyz缩放
+        color: Cesium.Color.WHITE, //颜色
+    });
+
+})
+```
+9. 围绕指定地点旋转飞行
+```
+scene.camera.flyCircleLoop = true; // 是否循环
+scene.camera.speedRatio = 5;     // 飞行速度
+viewerRef.current.scene.camera.flyCircle(point); // point 围绕飞行的点
+// 点击绘制一个中心点围绕飞行
+var handlerPoint = new Cesium.DrawHandler(viewerRef.current, Cesium.DrawMode.Point);
+handlerPoint.activate();
+handlerPoint.drawEvt.addEventListener(function (result) {
+var center = result.object.position;
+viewerRef.current.scene.camera.flyCircle(center);
+});
+```
