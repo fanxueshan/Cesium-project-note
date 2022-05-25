@@ -108,18 +108,18 @@ viewerRef.current.scene.camera.flyCircle(center);
    3. 弧度 Cartographic 例如：new Cesium.Cartographic(longitude, latitude, height)；弧度表示的经度、纬度和高度，实际的经纬度是角度
    4. 转换：
       1. 经纬度转换为世界坐标
-      ```
-      Cesium.Cartesian3.fromDegrees(longitude, latitude, height, ellipsoid, result) ;
-      ```
+         ```
+         Cesium.Cartesian3.fromDegrees(longitude, latitude, height, ellipsoid, result) ;
+         ```
       3. 世界坐标转换为经纬度
-      ```
-      var ellipsoid=viewer.scene.globe.ellipsoid;
-      var cartesian3=new Cesium.cartesian3(x,y,z);
-      var cartographic=ellipsoid.cartesianToCartographic(cartesian3);
-      var lat=Cesium.Math.toDegrees(cartographic.latitude);
-      var lng=Cesium.Math.toDegrees(cartographic.longitude);
-      var alt=cartographic.height;
-      ```
+         ```
+         var ellipsoid=viewer.scene.globe.ellipsoid;
+         var cartesian3=new Cesium.cartesian3(x,y,z);
+         var cartographic=ellipsoid.cartesianToCartographic(cartesian3);
+         var lat=Cesium.Math.toDegrees(cartographic.latitude);
+         var lng=Cesium.Math.toDegrees(cartographic.longitude);
+         var alt=cartographic.height;
+         ```
       4. 弧度和经纬度
          1. 经纬度转弧度：Cesium.CesiumMath.toRadians(degrees) 
          2. 弧度转经纬度：Cesium.CesiumMath.toDegrees(radians)
