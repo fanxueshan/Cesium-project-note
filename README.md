@@ -3,6 +3,16 @@
 ```
    const viewer = new Cesium.Viewer('cesiumContainer', {一些配置项})
 ```
+   在地图上添加一个点
+```
+   const entity=viewer.entities.add({
+        position:Cesium.Cartesian3.fromDegrees(16.39,39.91,400),
+        point:{
+            pixelSize:100,
+            color:new Cesium.Color(0,1,0,1)
+         }
+    })
+```
 2. 更换世界地图
 ```
  viewer.imageryLayers.addImageryProvider(new Cesium.SingleTileImageryProvider({
@@ -55,6 +65,7 @@ Cesium.when.all([promise...], function (layers) {})
 ```
 6. 图层的显示、隐藏和删除
 ```
+viewer.scene.globe.show=true //打开三维地球图层
 layer.visible=false // 隐藏图层
 viewer.scene.layers.remove(图层名称) // 删除图层
 ```
@@ -133,3 +144,4 @@ viewerRef.current.scene.camera.flyCircle(center);
          ```
          Cesium.SceneTransforms.wgs84ToWindowCoordinates(scene, Cartesian3);
          ```
+11. 
