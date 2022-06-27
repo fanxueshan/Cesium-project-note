@@ -3,7 +3,7 @@
 ```
    const viewer = new Cesium.Viewer('cesiumContainer', {一些配置项})
 ```
-   在地图上添加一个点
+   >在地图上添加一个点
 ```
    const entity=viewer.entities.add({
         position:Cesium.Cartesian3.fromDegrees(16.39,39.91,400),
@@ -111,37 +111,80 @@ viewerRef.current.scene.camera.flyCircle(center);
 });
 ```
 10. 几种坐标及其之间的转换
-   1. 世界坐标（Cartesian3：笛卡尔空间直角坐标系）椭球中心为原点的空间直角坐标系中的一个点的坐标。例如： new Cesium.Cartesian3(0, 0, 6378137) // 北极
-   2. 经纬度地理坐标系，坐标原点在椭球的质心。
-      经度： 大地子午面与本初子午面间的两面角，东正西负。
-      纬度： 椭球面上某点的法线与赤道平面的夹角。北正南负。
-      Cesuim中没有具体的经纬度对象，要得到经纬度首先需要计算为弧度，再进行转换
-   3. 弧度 Cartographic 例如：new Cesium.Cartographic(longitude, latitude, height)；弧度表示的经度、纬度和高度，实际的经纬度是角度
-   4. 转换：
-      1. 经纬度转换为世界坐标
-         ```
-         Cesium.Cartesian3.fromDegrees(longitude, latitude, height, ellipsoid, result) ;
-         ```
-      3. 世界坐标转换为经纬度
-         ```
-         var ellipsoid=viewer.scene.globe.ellipsoid;
-         var cartesian3=new Cesium.cartesian3(x,y,z);
-         var cartographic=ellipsoid.cartesianToCartographic(cartesian3);
-         var lat=Cesium.Math.toDegrees(cartographic.latitude);
-         var lng=Cesium.Math.toDegrees(cartographic.longitude);
-         var alt=cartographic.height;
-         ```
-      4. 弧度和经纬度
-         1. 经纬度转弧度：Cesium.CesiumMath.toRadians(degrees) 
-         2. 弧度转经纬度：Cesium.CesiumMath.toDegrees(radians)
-      5. 屏幕坐标和世界坐标相互转换
-         1. 屏幕转世界坐标
-         ```
-         var pick1= new Cesium.Cartesian2(0,0);
-         var cartesian = viewer.scene.globe.pick(viewer.camera.getPickRay(pick1),viewer.scene);
-         ```
-         2. 世界坐标转屏幕坐标
-         ```
-         Cesium.SceneTransforms.wgs84ToWindowCoordinates(scene, Cartesian3);
-         ```
-11. 
+   >1. 世界坐标（Cartesian3：笛卡尔空间直角坐标系）椭球中心为原点的空间直角坐标系中的一个点的坐标。例如： new Cesium.Cartesian3(0, 0, 6378137) // 北极
+   >2. 经纬度地理坐标系，坐标原点在椭球的质心。
+      >>经度： 大地子午面与本初子午面间的两面角，东正西负。
+      >>纬度： 椭球面上某点的法线与赤道平面的夹角。北正南负。
+      >>Cesuim中没有具体的经纬度对象，要得到经纬度首先需要计算为弧度，再进行转换
+   >3. 弧度 Cartographic 例如：new Cesium.Cartographic(longitude, latitude, height)；弧度表示的经度、纬度和高度，实际的经纬度是角度
+   >4. 转换公式如下
+
+```
+//经纬度转换为世界坐标
+ Cesium.Cartesian3.fromDegrees(longitude, latitude, height, ellipsoid, result) ;
+```
+```
+//世界坐标转换为经纬度
+var ellipsoid=viewer.scene.globe.ellipsoid;
+var cartesian3=new Cesium.cartesian3(x,y,z);
+var cartographic=ellipsoid.cartesianToCartographic(cartesian3);
+var lat=Cesium.Math.toDegrees(cartographic.latitude);
+var lng=Cesium.Math.toDegrees(cartographic.longitude);
+var alt=cartographic.height;
+```
+```
+//弧度和经纬度
+//经纬度转弧度：
+Cesium.CesiumMath.toRadians(degrees) 
+//弧度转经纬度：
+Cesium.CesiumMath.toDegrees(radians)
+``` 
+ ```
+//屏幕坐标和世界坐标相互转换
+//屏幕转世界坐标
+var pick1= new Cesium.Cartesian2(0,0);
+var cartesian = viewer.scene.globe.pick(viewer.camera.getPickRay(pick1),viewer.scene);
+//世界坐标转屏幕坐标
+Cesium.SceneTransforms.wgs84ToWindowCoordinates(scene, Cartesian3);
+```
+11. 导入矢量数据
+```
+viewer.dataSources.add(
+Cesium.GeoJsonDataSource.load("../Cesium-1.94.3/Apps/SampleData/ne_10m_us_states.topojson")
+)
+```
+12、相机系统的使用
+>1.setView
+```
+const position=Cesium.Cartesian3.fromDegrees(116.39,39.91,800);//设置一个位置
+   viewer.camera.setView({
+      destination:position,
+      orientation:{
+         heading:Cesium.Math.toRadians(0),
+         pitch:Cesium.Math.toRadians(-20),
+         roll:0
+      }
+ })
+```
+>2.flyTO
+```
+const position=Cesium.Cartesian3.fromDegrees(116.39,39.91,800);//设置一个位置
+viewer.camera.flyTo({
+   destination:position,
+   orientation:{
+      heading:Cesium.Math.toRadians(0),
+      pitch:Cesium.Math.toRadians(-90),
+      roll:0
+   },
+   duration:5
+})
+```
+>3.lookAt
+```
+const position=Cesium.Cartesian3.fromDegrees(116.39,39.91,800);//设置一个位置
+const center=Cesium.Cartesian3.fromDegrees(116.39,39.91);
+        const heading=Cesium.Math.toRadians(50);
+        const pitch=Cesium.Math.toRadians(-90);
+        const range=2500;
+        viewer.camera.lookAt(center,new Cesium.HeadingPitchRange(heading,pitch,range));
+```
